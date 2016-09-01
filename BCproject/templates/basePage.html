@@ -5,7 +5,7 @@
     <title>basePage</title>
 </head>
 <body>
-    <form>
+    <form method="post" action="/dblink">
         <p>Title:<input type = "text" name="title"></p>
         <p>Description:<textarea name="description" cols ="20" rows="4"></textarea></p>
         <p>
@@ -28,7 +28,12 @@
                 <option value="reports">Reports</option>
             </select>
         </p>
+        <p><input type="submit"/></p>
     </form>
-
+    {% if form_content %}
+    <section>
+        <h1>The for submitted</h1>
+    </section>
+    {% endif %}
 </body>
 </html>

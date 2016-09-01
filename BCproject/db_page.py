@@ -1,10 +1,11 @@
+import untitled5
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, Numeric, String, Date
+from sqlalchemy import Column, Integer, String, Date
 base = declarative_base()
 
-class Request(base):
-    __tablename__ = 'requests'
 
+class FRequest(base):
+    __tablename__ = 'f_requests'
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(50))
     description = Column(String(500))
@@ -13,3 +14,5 @@ class Request(base):
     date = Column(Date())
     url = Column(String(255))
     pArea = Column(String(50))
+
+    base.metadata.create_all(untitled5.engine)
