@@ -4,7 +4,7 @@ import db_page
 from flask import Flask
 
 
-@app.route('/dblink2', methods=['POST'])
+
 
 def enter_data():
     new_request = db_page.FRequest(

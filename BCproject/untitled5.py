@@ -1,13 +1,36 @@
 from flask import Flask, render_template, request
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-import db_page
-
-engine = create_engine('sqlite:///:memory:')
-Session = sessionmaker(bind=engine)
-session = Session()
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\AvaJ84\\Downloads\\sqlite-3_10_1_win\\sqlite-3_10_1\\BCproject'
+db = SQLAlchemy(app)
+
+
+class FRequest(db.Model):
+    __tablename__ = 'f_requests'
+    id = db.Column('id', db.Integer, primary_key=True)
+    title = db.Column('title', db.Unicode)
+    description = db.Column('description', db.Unicode)
+    client = db.Column('client', db.Unicode)
+    priority = db.Column('priority', db.Integer)
+ ##   date = db.Column('date', db.Date)
+    url = db.Column('url', db.Unicode)
+    pArea = db.Column('pArea', db.Unicode)
+
+    def __init__(self, id, title, description, client, priority, url, pArea):
+        self.id = id
+        self.title = title
+        self.description = description
+        self.client = client
+        self.priority = priority
+ ##self.date = date
+        self.url = url
+        self.pArea = pArea
+
+    def __repr__(self):
+        return '<FRequest %r>' % self.title
+
+    db.create_all()
 
 
 @app.route('/')
@@ -15,26 +38,19 @@ def base_page():
     return render_template("basePage.html")
 
 
-@app.route('/dblink2')
+@app.route('/dblink2', methods=['GET', 'POST'])
 def enter_data():
-    return "Hello, Ava!"
-    new_request = db_page.FRequest(
-        title='First Request',
-        description='This is the request that is testing the database',
-        client='Client A',
-        priority=8,
-        date='08/20/1984',
-        url='http://yahoo.com',
-        pArea='billing'
-    )
-    session.add(new_request)
-    session.commit()
+    new_request = FRequest(1, 'First Request', 'This is the request that is testing the database',
+                                   'Client A', 8, 'http://yahoo.com', 'billing')
+    db.session.add(new_request)
+    db.session.commit()
+    return "check database"
 
 
 @app.route('/dblink', methods=['GET', 'POST'])
 def e_data():
     if request.method == 'POST':
-        return "yes post"
+        return request.form['title']
     else:
         return "no post"
 

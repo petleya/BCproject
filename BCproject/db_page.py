@@ -1,18 +1,32 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 import untitled5
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date
-base = declarative_base()
 
+untitled5.app.config['SQLALCHEMY_DATABASE_URI'] = "oniddb.cws.oregonstate.edu", "petleya-db", "h4QQvoY9jtkpIVYy", "petleya-db"
+db = SQLAlchemy(untitled5.app)
 
-class FRequest(base):
+class FRequest(db.Model):
     __tablename__ = 'f_requests'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String(50))
-    description = Column(String(500))
-    client = Column(String(50))
-    priority = Column(Integer())
-    date = Column(Date())
-    url = Column(String(255))
-    pArea = Column(String(50))
+    id = db.Column('id', db.Integer, primary_key=True)
+    title = db.Column('title', db.Unicode)
+    description = db.Column('description', db.Unicode)
+    client = db.Column('client', db.Unicode)
+    priority = db.Column('priority', db.Integer)
+    date = db.Column('date', db.Date)
+    url = db.Column('url', db.Unicode)
+    pArea = db.Column('pArea', db.Unicode)
 
-    base.metadata.create_all(untitled5.engine)
+    def __init__(self, id, title, description, client, priority, date, url, pArea):
+        self.id = id
+        self.title = title
+        self.description = description
+        self.client = client
+        self.priority = priority
+        self.date = date
+        self.url = url
+        self.pArea = pArea
+
+    def __repr__(self):
+        return '<FRequest %r>' % self.title
+
+    db.create_all()
