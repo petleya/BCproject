@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import *
 
+#initializing flask
 app = Flask(__name__)
+#connecting to sqllite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\AvaJ84\\Downloads\\sqlite-3_10_1_win\\sqlite-3_10_1\\BCproject'
 db = SQLAlchemy(app)
 
-
+#setting up table
 class FRequest(db.Model):
     __tablename__ = 'f_request'
     title = db.Column('title', db.Unicode, primary_key=True)
@@ -35,36 +37,22 @@ class FRequest(db.Model):
 
 @app.route('/')
 def base_page():
-    val = 'hello this is some text'
+    #querying database for all entries
     fr = db.session.query(FRequest).all()
     value = fr
+    #rendering template and passing queried data
     return render_template("basePage.html", vals=value)
 
 
 @app.route('/dblink2', methods=['GET', 'POST'])
 def enter_data():
+    #inserting into database
     new_request = FRequest(request.form['title'], request.form['description'],
                            request.form['client'], request.form['priority'], request.form['date'], request.form['url'], request.form['pArea'])
     db.session.add(new_request)
     db.session.commit()
-#    try:
-       ## fr = FRequest.query.order_by(FRequest.title)
-       ## value = fr.title
- #   except:
-#        value = "not working"
-    fr = db.session.query(FRequest).all()
-  #  fr = FRequest.query.all()
-    value = fr[1].description
-    return value
+    return "inserted data"
 
-
-
-@app.route('/dblink', methods=['GET', 'POST'])
-def e_data():
-    if request.method == 'POST':
-        return request.form['title']
-    else:
-        return "no post"
 
 if __name__ == '__main__':
     app.run()
