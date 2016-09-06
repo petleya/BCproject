@@ -30,10 +30,15 @@
         </p>
         <p><input type="submit"/></p>
     </form>
-    {% if form_content %}
-    <section>
-        <h1>The for submitted</h1>
-    </section>
+    {% if vals %}
+        <table>
+            <tr><th>Title</th><th>Description</th><th>Client</th><th>Priority</th><th>Date</th><th>URL</th><th>Product Area</th></tr>
+            {% for val in vals %}
+                {% if val.client == 'A' %}
+                    <tr><td>{{val.title}}</td><td>{{val.description}}</td><td>{{val.client}}</td><td>{{val.priority}}</td><td>{{val.date}}</td><td>{{val.url}}</td><td>{{val.pArea}}</td></tr>
+                {% endif %}
+            {% endfor %}
+       </table>
     {% endif %}
 </body>
 </html>
